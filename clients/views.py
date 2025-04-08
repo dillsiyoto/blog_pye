@@ -66,3 +66,20 @@ class LoginView(View):
 
     def get(self, request: HttpRequest) -> HttpResponse:
         return render(request=request, template_name="login.html")
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        client: Client | None = authenticate(
+            request=request, 
+            username=username, 
+            password=password,
+        )
+        if not client:
+            messages.error(
+                request=request, 
+                message="Wrong username or password"
+            )
+            return render(request=request, template_name="login.html")
+        login(request=request, user=client)
+        return redirect(to="base")
