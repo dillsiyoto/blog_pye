@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        {% if posts %}
+            {% for post in posts %}
+            <div class="post">
+                <div class="author">{{ post.user }}</div>
+                <div class="title">{{ post.title }}</div>
+                <div class="description">{{ post.description }}</div>
+                <div class="images">{{ post.images }}</div>
+                <div class="likes">{{ post.likes }}</div>
+                <div class="dislikes">{{ post.dislikes }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-content">
+                <h1>There is nothing yet</h1>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
