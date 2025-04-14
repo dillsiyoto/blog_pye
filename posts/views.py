@@ -1,6 +1,7 @@
 import logging
 
 from django.views import View
+from django.db.models.query import QuerySet
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -16,7 +17,7 @@ class PostsView(View):
     """Posts controller with all methods."""
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        posts: Posts = Posts.objects.all()
+        posts: QuerySet[Posts] = Posts.objects.all()
         if not posts:
             return render(
                 request=request, template_name="posts.html",
@@ -24,7 +25,7 @@ class PostsView(View):
             )
         return render(
             request=request, template_name="posts.html", 
-            context=posts
+            context={"posts": posts}
         )
 
     def post(self, request: HttpRequest) -> HttpResponse:
