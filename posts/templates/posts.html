@@ -12,12 +12,13 @@
         {% if posts %}
             {% for post in posts %}
             <div class="post">
-                <div class="author">{{ post.user }}</div>
+                <div class="author">{{ post.user.username }}</div>
                 <div class="title">{{ post.title }}</div>
                 <div class="description">{{ post.description }}</div>
                 <div class="images">{{ post.images }}</div>
                 <div class="likes">{{ post.likes }}</div>
                 <div class="dislikes">{{ post.dislikes }}</div>
+                <div class="date_publication">{{ post.date_publication }}</div>
             </div>
             {% endfor %}
         {% else %}

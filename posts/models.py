@@ -4,6 +4,22 @@ from django.utils import timezone
 from clients.models import Client
 
 
+class Categories(models.Model):
+    title = models.CharField(
+        verbose_name="категория",
+        unique=True,
+        max_length=50
+    )
+
+    class Meta:
+        ordering = ("id",)
+        verbose_name = "категория"
+        verbose_name_plural = "категории"
+
+    def __str__(self):
+        return f"{self.pk} | {self.title}"
+
+
 class Posts(models.Model):
     title = models.CharField(
         verbose_name="Название поста",
@@ -31,6 +47,11 @@ class Posts(models.Model):
     dislikes = models.PositiveBigIntegerField(
         verbose_name="дизлайки",
         default=0,
+    )
+    categories = models.ManyToManyField(
+        to=Categories,
+        verbose_name="категории",
+        related_name="post_categories"
     )
 
     class Meta:
@@ -61,24 +82,3 @@ class Images(models.Model):
 
     def __str__(self):
         return f"{self.pk} | {self.image}"
-
-
-class Categories(models.Model):
-    title = models.CharField(
-        verbose_name="категория",
-        unique=True,
-        max_length=50
-    )
-    post = models.ManyToManyField(
-        to=Posts, 
-        related_name="posts_categories",
-        verbose_name="статья",
-    )
-
-    class Meta:
-        ordering = ("id",)
-        verbose_name = "категория"
-        verbose_name_plural = "категории"
-
-    def __str__(self):
-        return f"{self.pk} | {self.title}"
