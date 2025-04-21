@@ -1,7 +1,7 @@
 import logging
 
 from django.views import View
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
@@ -74,4 +74,13 @@ class LoginView(View):
             )
             return render(request=request, template_name="login.html")
         login(request=request, user=client)
+        return redirect(to="base")
+
+
+class LogoutView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        is_active = request.user.is_active
+        if not is_active:
+            return HttpResponse("Вы не авторизованы")
+        logout(request=request)
         return redirect(to="base")

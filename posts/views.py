@@ -30,7 +30,12 @@ class PostsView(View):
     """Posts controller with all methods."""
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        pass
+        is_active = request.user.is_active
+        if not is_active:
+            return redirect(to="login")
+        return render(
+            request=request, template_name="post_form.html"
+        )
 
     def post(self, request: HttpRequest) -> HttpResponse:
         pass
