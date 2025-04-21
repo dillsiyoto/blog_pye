@@ -18,6 +18,12 @@
                 <input type="text" name="category" placeholder="Введите категорию">
                 <button type="submit">Искать</button>
             </form>
+            {% if user %}
+                <div class="empty">waghfaegbfrg</div>
+                <button type="submit">
+                    <a href="{% url 'post_form' %}"></a>Создать пост
+                </button>
+            {% endif %}
         </aside>
 
         <main class="container">

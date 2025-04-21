@@ -13,20 +13,24 @@ from posts.models import Posts, Images
 logger = logging.getLogger()
 
 
+class BasePostView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        is_active = request.user.is_active
+        posts: QuerySet[Posts] = Posts.objects.all()
+        return render(
+            request=request, template_name="posts.html", 
+            context={
+                "posts": posts,
+                "user": is_active
+            }
+        )
+
+
 class PostsView(View):
     """Posts controller with all methods."""
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        posts: QuerySet[Posts] = Posts.objects.all()
-        if not posts:
-            return render(
-                request=request, template_name="posts.html",
-                status=404,
-            )
-        return render(
-            request=request, template_name="posts.html", 
-            context={"posts": posts}
-        )
+        pass
 
     def post(self, request: HttpRequest) -> HttpResponse:
         pass
