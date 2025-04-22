@@ -29,7 +29,7 @@
         <main class="container">
             {% for post in posts %}
                 <div class="post">
-                    <h2 class="post-title">{{ post.title }}</h2>
+                    <h2 class="post-title"><a href="{% url 'pk_post' post.pk %}">{{ post.title }}</a></h2>
                     <div class="post-meta">
                         Автор: {{ post.user.username }} |
                         Опубликовано: {{ post.date_publication|date:"d.m.Y H:i" }}
