@@ -52,12 +52,12 @@ class PostsView(View):
         )
         post.categories.set(request.POST.getlist("categories"))
         imgs = [Images(image=img, post=post) for img in images]
+        Images.objects.bulk_create(imgs)
         # for img in images:
         #     Images.objects.create(
         #         image=img,
         #         post=post
         #     )
-        Images.objects.bulk_create(imgs)
         return redirect(to="base")
 
 
