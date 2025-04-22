@@ -61,22 +61,31 @@ class PostsView(View):
         return redirect(to="base")
 
 
-class EditPostView(View):
+class ShowDeletePostView(View):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         try:
             post = Posts.objects.get(pk=pk)
-        except Posts.DoesNotExist as e:
+        except Posts.DoesNotExist:
             post = None
+        author = False
+        if request.user == post.user:
+            author = True
         return render(
             request=request, template_name="pk_post.html",
-            context={"post": post}
+            context={
+                "post": post,
+                "author": author
+            }
         )
 
-    def put(self, request: HttpRequest, pk: int) -> HttpResponse:
-        pass
-
-    def patch(self, request: HttpRequest, pk: int) -> HttpResponse:
-        pass
-
-    def delete(self, request: HttpRequest, pk: int) -> HttpResponse:
-        pass
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+        try:
+            post = Posts.objects.get(pk=pk)
+        except Posts.DoesNotExist:
+            pass
+        if request.user != post.user:
+            return HttpResponse(
+                "<h1>У тебя здесь нет власти</h1>"
+            )
+        post.delete()
+        return redirect(to="base")

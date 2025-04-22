@@ -35,6 +35,14 @@
                         👍 {{ post.likes }} |
                         👎 {{ post.dislikes }}
                     </div>
+                    {% if author %}
+                    <div class="form-delete">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Удалить" class="btn-submit">
+                        </form>
+                    </div>
+                    {% endif %}
                 </div>
             {% else %}
                 <p>Поста не существует</p>
