@@ -59,13 +59,24 @@ class PostsView(View):
         #     )
         Images.objects.bulk_create(imgs)
         return redirect(to="base")
-        
 
-    def put(self, request: HttpRequest) -> HttpResponse:
+
+class EditPostView(View):
+    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+        try:
+            post = Posts.objects.get(pk=pk)
+        except Posts.DoesNotExist as e:
+            post = None
+        return render(
+            request=request, template_name="pk_post.html",
+            context={"post": post}
+        )
+
+    def put(self, request: HttpRequest, pk: int) -> HttpResponse:
         pass
 
-    def patch(self, request: HttpRequest) -> HttpResponse:
+    def patch(self, request: HttpRequest, pk: int) -> HttpResponse:
         pass
 
-    def delete(self, request: HttpRequest) -> HttpResponse:
+    def delete(self, request: HttpRequest, pk: int) -> HttpResponse:
         pass
