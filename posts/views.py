@@ -1,8 +1,9 @@
 import logging
+from typing import Literal
 
 from django.views import View
 from django.db.models.query import QuerySet
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.utils import IntegrityError
@@ -89,3 +90,26 @@ class ShowDeletePostView(View):
             )
         post.delete()
         return redirect(to="base")
+
+
+class LikesView(View):
+    def post(
+        self, request: HttpRequest, 
+        pk: int, action: Literal["like", "dislike"]
+    ):
+        client = request.user
+        if not client.is_active:
+            return
+        try:
+            post = Posts.objects.get(pk=pk)
+        except Posts.DoesNotExist:
+            return
+        result = {}
+        if action == "like":
+            post.likes += 1
+            result["likes"] = post.likes
+        elif action == "dislike":
+            post.dislikes += 1
+            result["dislikes"] = post.dislikes
+        post.save(update_fields=["likes", "dislikes"])
+        return JsonResponse(data=result)
