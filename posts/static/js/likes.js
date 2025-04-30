@@ -11,3 +11,15 @@ function likePost(postId){
         document.getElementById("likeButton").innerText = `👍${data.likes}`;
     });
 }
+
+function dislikePost(postId){
+    fetch(`${postId}/dislike`, {
+        method: "POST",
+        headers: {
+            'X-CSRFToken': csrf_token,
+        },
+    }).then(response => response.json())
+    .then(data => {
+        document.getElementById("dislikeButton").innerText = `👎${data.dislikes}`;
+    });
+}

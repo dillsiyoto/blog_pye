@@ -32,6 +32,7 @@ AUTH_USER_MODEL = "clients.Client"
 INSTALLED_APPS = [
     "clients.apps.ClientsConfig",
     "posts.apps.PostsConfig",
+    "comments.apps.CommentsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
