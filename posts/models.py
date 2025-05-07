@@ -82,3 +82,28 @@ class Images(models.Model):
 
     def __str__(self):
         return f"{self.pk} | {self.image}"
+    
+
+class LikesDislikes(models.Model):
+    LIKE = 'like'
+    DISLIKE = 'dislike'
+    ACTIONS = [(LIKE, 'Like'), (DISLIKE, 'Dislike')]
+
+    user = models.ForeignKey(
+        to = Client, 
+        on_delete=models.CASCADE
+    )
+    post = models.ForeignKey(
+        to = Posts, 
+        on_delete=models.CASCADE
+    )
+    action = models.CharField(
+        max_length=7, 
+        choices=ACTIONS
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'post'], 
+                                    name='unique_like_dislike')
+        ]

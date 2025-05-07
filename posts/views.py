@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.utils import IntegrityError
 
-from posts.models import Posts, Images, Categories
+from posts.models import Posts, Images, Categories, LikesDislikes
 
 
 logger = logging.getLogger()
@@ -95,21 +95,37 @@ class ShowDeletePostView(View):
 class LikesView(View):
     def post(
         self, request: HttpRequest, 
-        pk: int, action: Literal["like", "dislike"]
+        pk: int, action: Literal["like", "dislike"] 
     ):
-        client = request.user
+        client = request.user # проверяем активен ли пользовтель
         if not client.is_active:
-            return
+            return HttpResponse("Вы не вошли") # если не активен, то сообщаем
         try:
-            post = Posts.objects.get(pk=pk)
+            post = Posts.objects.get(pk=pk) # пробуем найти пост по айди
         except Posts.DoesNotExist:
-            return
-        result = {}
-        if action == "like":
-            post.likes += 1
-            result["likes"] = post.likes
-        elif action == "dislike":
-            post.dislikes += 1
-            result["dislikes"] = post.dislikes
-        post.save(update_fields=["likes", "dislikes"])
-        return JsonResponse(data=result)
+            return HttpResponse("Пост не найден") # если пост не найден, то сообщаем
+        
+        vote = LikesDislikes.objects.filter(user=client, post=post).first() # ищем оставлял ли лайк юзер
+        if vote: # если оставлял
+            if action == 'like': # если оставлял лайк
+                if vote.action == 'dislike': # и меняет на дизлайк
+                    post.likes -= 1 # убираем лайк
+                    post.dislikes += 1 # ставим дизлайк
+
+            elif action == 'diclike': # если оставлял дизлайк
+                if vote.action == 'like': # и меняет на лайк
+                    post.dislikes -= 1 # убираем дизлайк
+                    post.likes += 1 # ставим лайк
+            vote.save() # сохраняем
+        else: # если не оставлял
+            if vote.action == 'like': # и хочет оставить лайк
+                post.likes += 1 # ставим лайк
+            elif action == 'dislike': # если хочет оставить дизлайк
+                post.dislikes += 1 # ставим дизлайк
+            LikesDislikes.objects.create(user=client, post=post, action=action) # записываем в базу
+        post.save(update_fields=["likes", "dislikes"]) # сохраняем
+        return JsonResponse({
+            "likes": post.likes,
+            "dislikes": post.dislikes
+        })
+            
