@@ -1,19 +1,21 @@
-/* Центрируем форму */
-.auth-container {
-    width: 320px;
-    margin: 80px auto;
-    padding: 30px;
+/* Общий контейнер для профиля и редактирования */
+.auth-container, .profile-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 /* Заголовок */
-.auth-container h2 {
+.auth-container h2, .profile-container h2 {
     margin-bottom: 20px;
-    font-size: 24px;
+    font-size: 28px;
     color: #333;
+    font-weight: 600;
 }
 
 /* Сообщения */
@@ -24,7 +26,7 @@
 .message {
     padding: 10px;
     margin-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 14px;
 }
 
@@ -43,49 +45,93 @@
 /* Группа полей */
 .input-group {
     margin-bottom: 15px;
+    text-align: left;
 }
 
-.input-group input {
+.input-group label {
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.input-group input, .input-group select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 14px;
     transition: 0.3s;
+    margin-top: 8px;
 }
 
-.input-group input:focus {
-    border-color: #4CAF50;
+.input-group input:focus, .input-group select:focus {
+    border-color: #007bff;
     outline: none;
 }
 
 /* Кнопка */
-button {
+button, .edit-button .btn {
     width: 100%;
-    padding: 12px;
-    background-color: #4CAF50;
+    padding: 14px;
+    background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     transition: 0.3s;
+    margin-top: 20px;
 }
 
-button:hover {
-    background-color: #45a049;
+button:hover, .edit-button .btn:hover {
+    background-color: #0056b3;
 }
 
 /* Ссылка */
 p {
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 p a {
-    color: #4CAF50;
+    color: #007bff;
     text-decoration: none;
 }
 
 p a:hover {
     text-decoration: underline;
+}
+
+/* Стиль для профиля */
+.profile-info {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.profile-info p {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+.profile-info strong {
+    font-weight: bold;
+}
+
+/* Кнопка редактировать */
+.edit-button {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.edit-button .btn {
+    padding: 14px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.edit-button .btn:hover {
+    background-color: #0056b3;
 }

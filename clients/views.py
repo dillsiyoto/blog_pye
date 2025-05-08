@@ -86,11 +86,32 @@ class LogoutView(View):
         return redirect(to="base")
 
 
-class ProvileView(View):
+class ProfileView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         is_active = request.user.is_active
         if not is_active:
-            return HttpResponse("Вы не авторизованы")
-        logout(request=request)
+            return redirect(to = 'login')
         return render(request=request, template_name='profile.html')
     
+    
+class EditProfileView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        is_active = request.user.is_active
+        if not is_active:
+            return redirect(to = 'login')
+        return render(request=request, template_name='edit_profile.html')
+    
+    def post(self, request: HttpRequest) -> HttpResponse:
+        delete_profile = request.POST.get('delete_profile')
+        if delete_profile == 'true':
+            user.delete()
+            return redirect('login')
+        
+        user = request.user
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.username = request.POST.get('username')
+        user.birthday = request.POST.get('birthday')  
+        user.gender = request.POST.get('gender')      
+        user.save()
+        return redirect('profile')

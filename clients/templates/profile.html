@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход</title>
+    <title>Профиль</title>
     <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 </head>
 <body>
-    <div class="auth-container">
+    <div class="profile-container">
         <h2>Профиль</h2>
 
         {% if messages %}
@@ -19,13 +19,18 @@
             </div>
         {% endif %}
 
-        <p>{{ user.first_name }}</p>
-        <p>{{ user.last_name }}</p>
-        <p>{{ user.username }}</p>
-        <p>{{ user.birthday }}</p>
-        <p>{{ user.gender }}</p>
+        <div class="profile-info">
+            <p><strong>Имя:</strong> {{ user.first_name }}</p>
+            <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
+            <p><strong>Логин:</strong> {{ user.username }}</p>
+            <p><strong>Дата рождения:</strong> {{ user.birthday }}</p>
+            <p><strong>Пол:</strong> {{ user.gender }}</p>
+        </div>
 
-        <
+        <div class="edit-button">
+            <a href="{% url 'edit_profile' %}" class="btn">Редактировать профиль</a>
+            <button type="submit" name="delete_profile" value="true" style="color: red;">Удалить профиль</button>
+        </div>
     </div>
 </body>
 </html>
