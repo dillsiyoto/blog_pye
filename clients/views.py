@@ -84,3 +84,13 @@ class LogoutView(View):
             return HttpResponse("Вы не авторизованы")
         logout(request=request)
         return redirect(to="base")
+
+
+class ProvileView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        is_active = request.user.is_active
+        if not is_active:
+            return HttpResponse("Вы не авторизованы")
+        logout(request=request)
+        return render(request=request, template_name='profile.html')
+    
