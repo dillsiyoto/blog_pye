@@ -1,4 +1,5 @@
 import logging
+import os
 
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
@@ -9,6 +10,7 @@ from django.contrib import messages
 from django.db.utils import IntegrityError
 
 from clients.models import Client
+from clients.utils import send_email
 
 
 logger = logging.getLogger()
@@ -115,3 +117,42 @@ class EditProfileView(View):
         user.gender = request.POST.get('gender')      
         user.save()
         return redirect('profile')
+    
+class ActivationView(View):
+    def get(
+        self, request: HttpRequest, username: str, code: str
+    ) -> HttpResponse:
+        client = Client.objects.filter(
+            username=username,
+            activation_code=code
+        ).first()
+        if not client:
+            return HttpResponse(content="<h1>Ты кто?</h1>")
+        client.is_active = True
+        client.save(update_fields=["is_active"])
+        return redirect(to="login")
+    
+
+class ResetPassword(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        return render(request=request, template_name='email_for_reset.html')
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        email = request.POST.get('email')
+        client = Client.objects.filter(
+            email = email
+        ).first()
+        username = client.username
+        new_password = os.urandom(6).hex()
+        if not client:
+            return HttpResponse(content="<h1>Авторизуйтесь</h1>")
+        send_email(
+            template="reset_password.html", 
+            context={
+                "username": username, 
+                "new_password": new_password},
+            to=email, title="Confirm your account"
+        )
+        client.password = make_password(new_password)
+        client.save(update_fields=["password"])
+        return redirect(to="login")
